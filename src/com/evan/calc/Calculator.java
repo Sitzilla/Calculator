@@ -10,7 +10,7 @@ public class Calculator extends JPanel implements ActionListener {
 		JFrame window = new JFrame("Java Calculator");
 		Calculator content = new Calculator();
 		window.setContentPane(content);
-		Dimension d = new Dimension(300,500);
+		Dimension d = new Dimension(300,425);
 		window.setPreferredSize(d);
 		window.setResizable(false);
 		window.pack();
@@ -28,13 +28,12 @@ public class Calculator extends JPanel implements ActionListener {
 	JPanel panelFour = new JPanel();
 	JPanel panelFive = new JPanel();
 	
-	JLabel labelOutput = new JLabel("0");
+	JLabel labelOutput = new JLabel("0", JLabel.RIGHT);
 	
-	Font f = new Font("1",1 ,16);
+	private Font bSize20 = new Font("Arial", Font.PLAIN, 20);
 	
 	//creates the buttons for each row
 	JButton numberOne = new JButton("1");
-	//JButton.setFont(f);
 	JButton numberTwo = new JButton("2");
 	JButton numberThree = new JButton("3");
 	JButton numberFour = new JButton("4");
@@ -50,8 +49,8 @@ public class Calculator extends JPanel implements ActionListener {
 	JButton mathMul = new JButton("*");
 	JButton mathDiv = new JButton("/");
 	
-	JButton buttonClear = new JButton("Clear");
-	JButton buttonEnter = new JButton("Enter");
+	JButton buttonClear = new JButton("Clr");
+	JButton buttonEnter = new JButton("=");
 	
 	//creates new instance of other object classes
 	numberArray inputArray = new numberArray();
@@ -61,8 +60,25 @@ public class Calculator extends JPanel implements ActionListener {
 	
 	public Calculator() {
 //		setBackground //need to create method 	
-
-		
+		//sets the font for the buttons/label
+		numberOne.setFont(bSize20);
+		numberTwo.setFont(bSize20);
+		numberThree.setFont(bSize20);
+		numberFour.setFont(bSize20);
+		numberFive.setFont(bSize20);
+		numberSix.setFont(bSize20);
+		numberSeven.setFont(bSize20);
+		numberEight.setFont(bSize20);
+		numberNine.setFont(bSize20);
+		numberZero.setFont(bSize20);
+		mathAdd.setFont(bSize20);
+		mathSub.setFont(bSize20);
+		mathMul.setFont(bSize20);
+		mathDiv.setFont(bSize20);
+		buttonEnter.setFont(bSize20);
+		buttonClear.setFont(bSize20);
+		labelOutput.setFont(bSize20);
+		labelOutput.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20));
 //Creates the four panels for the calculator and populates them with buttons
 		panelOne.setLayout( new GridLayout(1,1));
 		panelOne.add(labelOutput);
@@ -131,24 +147,22 @@ public class Calculator extends JPanel implements ActionListener {
 		}
 		//if math button is pressed
 		if (source==mathAdd) {
+		restartIndex = 0;
 		pressMathButton(source, arrayIndex, 1);	
 		}else if (source==mathSub){
+		restartIndex = 0;
 		pressMathButton(source, arrayIndex, 2);
 		}else if (source==mathMul){
+		restartIndex = 0;	
 		pressMathButton(source, arrayIndex, 3);		
 		}else if (source==mathDiv){
+		restartIndex = 0;
 		pressMathButton(source, arrayIndex, 4);	
 		}
 		
-		
 		//if number button is pressed
-		pressNumberButton(source, arrayIndex);
-		
-		
-		
-		//nested if's to check for mathematical operators
+		 restartIndex = pressNumberButton(source, arrayIndex, restartIndex);
 		 
-		
 		//if statement that performs mathematical function on both statements in the array
 		 if (source==buttonClear) {
 			 inputArray.clearArray();
@@ -158,9 +172,13 @@ public class Calculator extends JPanel implements ActionListener {
 		} else if (source==buttonEnter) {
 			labelOutput.setText(Integer.toString(mathFunction.doMathOperator(inputArray.getArray(0), inputArray.getArray(1))));
 			inputArray.updateArray(mathFunction.doMathOperator(inputArray.getArray(0), inputArray.getArray(1)));
-			mathFunction.clearOperator();
+		//	mathFunction.clearOperator();
+			restartIndex = 1;
 		}
+			
 		
+		 
+		 
 	}
 		public void pressMathButton(Object obj, int arrayIn, int mathOper){
 				if (arrayIn==0){
@@ -171,8 +189,12 @@ public class Calculator extends JPanel implements ActionListener {
 					mathFunction.setOperator(mathOper);
 				}	
 		}
-		public void pressNumberButton(Object obj, int i) {
+		public int pressNumberButton(Object obj, int i, int restartIn) {
 			int tempVar = 0;
+			if (restartIn==1){
+			inputArray.clearArray();
+			 arrayIndex = 0;
+			}
 			if(obj.toString()=="numberOne") {
 			System.out.println(obj);
 			}
@@ -197,12 +219,12 @@ public class Calculator extends JPanel implements ActionListener {
 			} else if (obj==numberZero){
 			tempVar = 0; 
 			} else {
-				return;
+				return 0;
 			}
 			
 			inputArray.setArray(tempVar, arrayIndex);
 			labelOutput.setText(Integer.toString(inputArray.getArray(arrayIndex)));
-			
+			return 0;
 		}
 	
 		

@@ -1,5 +1,7 @@
 package com.evan.calc;
 
+import javax.swing.JOptionPane;
+
 public class mathOperator {
 
 	private int mathFunction;
@@ -21,6 +23,7 @@ public class mathOperator {
 	}
 	
 	public int doMathOperator(int i, int g) {
+		System.out.println(g);
 		switch (mathFunction) {
 			case 1: return (i+g);
 					
@@ -28,7 +31,13 @@ public class mathOperator {
 					
 			case 3: return (i*g);
 					
-			case 4: return (i/g);
+			//checks for divide-by-zero error
+			case 4:	if (g==0) {
+						JOptionPane.showMessageDialog(null, "Cannot divide by zero");
+						return 0;
+					} else {
+						return (i/g);
+					}
 			default: return (1);	
 		}
 	}
